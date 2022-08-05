@@ -4,8 +4,10 @@ import smtplib
 import random
 
 class Validators:
-    def __init__(self, report):
+    def __init__(self, report, comparative,verification):
         self.report = report
+        self.comparative = comparative #separate if it`s a validation to sgin up or to edit
+        self.verification = verification
         print("chegou aqui?")
 
     def emailConfirmation(self,name,email):
@@ -32,6 +34,12 @@ class Validators:
             self.report.label_24.setText("Conexão Falhou")
             return False, 0
 
+    def compare_Code(self,code):
+        if code == self.verification.lineEdit.text():
+            print("Deu bom, chamar função pra por no banco de dados")
+        else:
+            print("deu erro")
+            print("codigo que peguei ",self.verification.lineEdit.text(), "codigo gerado", code)
 
 
     def birthValidation(self,date):
@@ -52,29 +60,38 @@ class Validators:
             return True
 
     def passwordValidation(self,password):
+        for n in password:
+            if n == " ":
+                self.report.label_25.setText("Não pode conter espaço")
+                return False
+        if password == "":
+            self.report.label_25.setText("Senha em branco")
+            return False
         if len(password) < 8:
-            print("entrou1")
+            self.report.label_25.setText("Senha precisa ter 8 digitos ou mais")
             return False
         if password.islower():
-            print("entrou1")
+            self.report.label_25.setText("Senha precisa ter pelo menos uma letra maiúscula")
             return False
         if password.isupper():
-            print("entrou1")
+            self.report.label_25.setText("Senha precisa ter pelo menos uma letra minuscula")
             return False
         if password.isalpha():
-            print("entrou2")
+            self.report.label_25.setText("Senha precisa ter pelo menos um numero")
             return False
         if password.isalnum():
-            print("entrou3")
+            self.report.label_25.setText("Senha precisa ter pelo menos um caractere especial")
             return False
         else:
-            print("retornou bom")
+            self.report.label_25.setText("")
             return True
 
     def passwordConfirmation(self,password, passwordconfirmation):
         if password == passwordconfirmation:
+            self.report.label_19.setText("")
             return True
         else:
+            self.report.label_26.setText("Senhas não correspondem")
             return False
 
     # function to validate some fields
@@ -134,7 +151,9 @@ class Validators:
         film_category = self.report.lineEdit_7.text()
         to_do_list = self.report.textEdit.toPlainText()
         buy_list = self.report.textEdit_2.toPlainText()
-        email = self.report.lineEdit_8.text()
+        # if it`s only edition there`s no need to check email again
+        if self.comparative == 1:
+            email = self.report.lineEdit_8.text()
         password = self.report.lineEdit_9.text()
         password_confirmation = self.report.lineEdit_10.text()
 
@@ -148,17 +167,31 @@ class Validators:
         profession_validator = self.nameValidator(profession, self.report.label_21)
         team_validator = self.nameValidator(team, self.report.label_22)
         film_category_validator = self.nameValidator(film_category, self.report.label_23)
-        email_validator = self.emailValidator(email, self.report.label_24)
         password_validator = self.passwordValidation(password)
         password_confirmation_validator = self.passwordConfirmation(password, password_confirmation)
+        # if it`s only edition there`s no need to check email again
+        if self.comparative == 1:
+            email_validator = self.emailValidator(email, self.report.label_24)
+        else:
+            email_validator = True
 
         validation = [name_validator, surname_validator, cpf_validator, birth_date_validator, city_validator,
                       profession_validator, team_validator, film_category_validator, email_validator,
                       password_validator,
                       password_confirmation_validator]
 
-        if False in validation:
+        #in new sign up needs to check email
+        if self.comparative == 1:
+            if False in validation:
+                print("nok")
+            else:
+                password_validator, code = self.emailConfirmation(name, email)
+                print(code)
+                self.verification.show()
+                self.verification.lineEdit.setText("")
+                self.verification.pushButton_2.clicked.connect(lambda: self.compare_Code(code))
+
+        elif False in validation:
             print("nok")
         else:
-            password_validator, code = self.emailConfirmation(name, email)
-            print(code)
+            print("tratar banco de dados")

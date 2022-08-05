@@ -5,16 +5,19 @@ def window_swap(wopen,wclose):
     wopen.show()
     wclose.close()
 
+#le = QtWidgets.QLineEdit()
+#le.setEchoMode(QtWidgets.QLineEdit.Password)
+
 app=QtWidgets.QApplication([])
 main_window = uic.loadUi("Tela_Inicial.ui")
 login_window = uic.loadUi("Login.ui")
 signup_window = uic.loadUi("Cadastro.ui")
 edit_window = uic.loadUi("Editar.ui")
 dashboard_window = uic.loadUi("Dashboard.ui")
-verificacao_window = uic.loadUi("Verificacao.ui")
+verification_window = uic.loadUi("Verificacao.ui")
 
-cliente_novo = Validators.Validators(signup_window)
-cliente_editar = Validators.Validators(edit_window)
+cliente_novo = Validators.Validators(signup_window,1,verification_window)
+cliente_editar = Validators.Validators(edit_window,0,verification_window)
 
 #report.pushButton.clicked.connect(cliente.Data_Validator)
 #instructions for all buttons in all pages
