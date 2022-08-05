@@ -6,6 +6,7 @@ import random
 class Validators:
     def __init__(self, report, comparative,verification):
         self.report = report
+        print("criei o primeiro self")
         self.comparative = comparative #separate if it`s a validation to sgin up or to edit
         self.verification = verification
         print("chegou aqui?")
@@ -15,6 +16,7 @@ class Validators:
         code = ''
         for i in range(6):
             code = code + random.choice(numbers)
+        print(code)
         body = f'Subject: Codigo de Verificacao. \nDear ContactName, \n\n' + f' Ola, {name}. \n\n Aqui se encontra seu codigo de verificacao: {code}' + '\n Obrigado, Equipe'
         try:
             smtpObj = smtplib.SMTP('smtp-mail.outlook.com', 587)
@@ -24,22 +26,24 @@ class Validators:
         try:
             smtpObj.ehlo()
             smtpObj.starttls()
-            smtpObj.login('pessoatestecsv@outlook.com', 'Senhacurso12345')
-            smtpObj.sendmail('pessoatestecsv@outlook.com', email, body)  # Or recipient@outlook
+            smtpObj.login('csvagateste123@outlook.com', 'Senhacurso12345')
+            print("ok1")
+            smtpObj.sendmail('csvagateste123@outlook.com', email, body)  # Or recipient@outlook
+            print("ok2")
             smtpObj.quit()
             self.report.label_24.setText("")
             print(code)
             return True, code
         except Exception as e:
             self.report.label_24.setText("Conexão Falhou")
-            return False, 0
+            return False, code
 
     def compare_Code(self,code):
         if code == self.verification.lineEdit.text():
             print("Deu bom, chamar função pra por no banco de dados")
         else:
             print("deu erro")
-            print("codigo que peguei ",self.verification.lineEdit.text(), "codigo gerado", code)
+            print("codigo que peguei ",self.verification.lineEdit.text(), "codigo gerado ", code)
 
 
     def birthValidation(self,date):
@@ -88,7 +92,7 @@ class Validators:
 
     def passwordConfirmation(self,password, passwordconfirmation):
         if password == passwordconfirmation:
-            self.report.label_19.setText("")
+            self.report.label_26.setText("")
             return True
         else:
             self.report.label_26.setText("Senhas não correspondem")
@@ -96,6 +100,7 @@ class Validators:
 
     # function to validate some fields
     def nameValidator(self,name, label):
+        print("validador2")
         if name.replace(" ", "").isalpha():
             label.setText("")
             return True
@@ -139,7 +144,7 @@ class Validators:
         return True
 
     def Data_Validator(self):
-        print("validator")
+        print("validator1")
         name = self.report.lineEdit.text()
         surname = self.report.lineEdit_2.text()
         cpf = self.report.lineEdit_3.text()
@@ -153,13 +158,15 @@ class Validators:
         buy_list = self.report.textEdit_2.toPlainText()
         # if it`s only edition there`s no need to check email again
         if self.comparative == 1:
+            print("entrou")
             email = self.report.lineEdit_8.text()
         password = self.report.lineEdit_9.text()
         password_confirmation = self.report.lineEdit_10.text()
 
         # validators
-
+        print("validator11")
         name_validator = self.nameValidator(name, self.report.label_3)
+        print("validator12")
         surname_validator = self.nameValidator(surname, self.report.label_17)
         cpf_validator = self.cpf_validate(cpf)
         birth_date_validator = self.birthValidation(birth_date)
@@ -171,10 +178,12 @@ class Validators:
         password_confirmation_validator = self.passwordConfirmation(password, password_confirmation)
         # if it`s only edition there`s no need to check email again
         if self.comparative == 1:
+            print("entrou2")
             email_validator = self.emailValidator(email, self.report.label_24)
         else:
             email_validator = True
 
+        print("entrou3")
         validation = [name_validator, surname_validator, cpf_validator, birth_date_validator, city_validator,
                       profession_validator, team_validator, film_category_validator, email_validator,
                       password_validator,
@@ -186,6 +195,7 @@ class Validators:
                 print("nok")
             else:
                 password_validator, code = self.emailConfirmation(name, email)
+                print(name, email)
                 print(code)
                 self.verification.show()
                 self.verification.lineEdit.setText("")
