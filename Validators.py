@@ -4,12 +4,19 @@ import smtplib
 import random
 
 class Validators:
-    def __init__(self, report, comparative,verification):
+    def __init__(self, report, comparative,verification,wopen,wclose):
         self.report = report
         print("criei o primeiro self")
         self.comparative = comparative #separate if it`s a validation to sgin up or to edit
         self.verification = verification
+        self.wopen = wopen
+        self.wclose = wclose
         print("chegou aqui?")
+
+    def window_swap(self,wopen, wclose):
+        print("teste10")
+        wopen.show()
+        wclose.close()
 
     def emailConfirmation(self,name,email):
         numbers = '0123456789'
@@ -41,6 +48,8 @@ class Validators:
     def compare_Code(self,code):
         if code == self.verification.lineEdit.text():
             print("Deu bom, chamar função pra por no banco de dados")
+            self.verification.close()
+            self.window_swap(self.wopen, self.wclose) # troca de janela
         else:
             print("deu erro")
             print("codigo que peguei ",self.verification.lineEdit.text(), "codigo gerado ", code)
@@ -205,3 +214,4 @@ class Validators:
             print("nok")
         else:
             print("tratar banco de dados")
+            self.window_swap(self.wopen,self.wclose)
