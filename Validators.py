@@ -4,14 +4,17 @@ import smtplib
 import random
 
 class Validators:
-    def __init__(self, report, comparative,verification,wopen,wclose):
+    def __init__(self, report, comparative,verification,wopen,wclose,user_connection,connection):
         self.report = report
         print("criei o primeiro self")
         self.comparative = comparative #separate if it`s a validation to sgin up or to edit
         self.verification = verification
         self.wopen = wopen
         self.wclose = wclose
-        print("chegou aqui?")
+        self.user_connection = user_connection
+        self.connection = connection
+
+
 
     def window_swap(self,wopen, wclose):
         print("teste10")
@@ -48,6 +51,22 @@ class Validators:
     def compare_Code(self,code):
         if code == self.verification.lineEdit.text():
             print("Deu bom, chamar função pra por no banco de dados")
+            #call database function
+            name = self.report.lineEdit.text()
+            surname = self.report.lineEdit_2.text()
+            CPF = self.report.lineEdit_3.text()
+            birth_date = self.report.dateEdit.text()
+            city = self.report.lineEdit_4.text()
+            uf = self.report.comboBox.currentText()
+            profession = self.report.lineEdit_5.text()
+            soccer_team = self.report.lineEdit_6.text()
+            film_category = self.report.lineEdit_7.text()
+            to_do_list = self.report.textEdit.toPlainText()
+            buy_list = self.report.textEdit_2.toPlainText()
+            email = self.report.lineEdit_8.text()
+            password = self.report.lineEdit_9.text()
+            self.user_connection.writedown_signup(self.connection, name, surname, CPF, birth_date, city, uf, profession,soccer_team, film_category, to_do_list, buy_list, email, password)
+
             self.verification.close()
             self.window_swap(self.wopen, self.wclose) # troca de janela
         else:
@@ -167,7 +186,6 @@ class Validators:
         buy_list = self.report.textEdit_2.toPlainText()
         # if it`s only edition there`s no need to check email again
         if self.comparative == 1:
-            print("entrou")
             email = self.report.lineEdit_8.text()
         password = self.report.lineEdit_9.text()
         password_confirmation = self.report.lineEdit_10.text()
@@ -214,4 +232,18 @@ class Validators:
             print("nok")
         else:
             print("tratar banco de dados")
+            name = self.report.lineEdit.text()
+            surname = self.report.lineEdit_2.text()
+            CPF = self.report.lineEdit_3.text()
+            birth_date = self.report.dateEdit.text()
+            city = self.report.lineEdit_4.text()
+            uf = self.report.comboBox.currentText()
+            profession = self.report.lineEdit_5.text()
+            soccer_team = self.report.lineEdit_6.text()
+            film_category = self.report.lineEdit_7.text()
+            to_do_list = self.report.textEdit.toPlainText()
+            buy_list = self.report.textEdit_2.toPlainText()
+            password = self.report.lineEdit_9.text()
+            self.user_connection.writedown_edit(self.connection,name,surname,CPF,birth_date,city,uf,profession,soccer_team,film_category,to_do_list, buy_list,password)
+
             self.window_swap(self.wopen,self.wclose)
