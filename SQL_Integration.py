@@ -12,7 +12,6 @@ class SQL_Integration:
         return row
 
     def allUserInformation(self,connection,email,report):
-        print("chegoou aqui??")
         cursor = connection.cursor()
         comando = f""" SELECT * FROM Usuarios
                             WHERE email = '{email}'"""
@@ -59,15 +58,6 @@ class SQL_Integration:
         cursor.execute(comando)
         cursor.commit()
 
-    def writedown_edit(self, connection,name, surname,CPF,birth_date,city, uf, profession, soccer_team, film_category, to_do_list, buy_list, password):
-
-        cursor = connection.cursor()
-
-        comando = f""" INSERT INTO Usuarios (name, surname,CPF,birth_date,city, UF, profession, soccer_team, film_category, to_do_list, buy_list, password)
-        VALUES ('{name}','{surname}','{CPF}','{birth_date}','{city}','{uf}','{profession}','{soccer_team}','{film_category}','{to_do_list}', '{buy_list}','{password}')"""
-
-        cursor.execute(comando)
-        cursor.commit()
 
     def readfrom(self,connection):
         cursor = connection.cursor()

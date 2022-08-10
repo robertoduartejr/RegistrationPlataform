@@ -9,7 +9,6 @@ import SQL_Integration
 
 
 def window_swap(wopen,wclose):
-    print("teste10")
     wopen.show()
     wclose.close()
 

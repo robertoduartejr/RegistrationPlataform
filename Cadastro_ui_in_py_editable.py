@@ -6,7 +6,6 @@ import Validators
 
 class SignupWindow(Ui_MainWindow):
     def __init__(self,window):
-        print("foi")
         self.window = window
         self.setupUi(window)
         self.lineEdit_9.setEchoMode(QtWidgets.QLineEdit.Password)

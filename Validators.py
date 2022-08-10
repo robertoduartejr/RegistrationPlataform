@@ -72,7 +72,6 @@ class Validators:
 
     def compare_Code(self,code):
         if code == self.verification.lineEdit.text():
-            print("Deu bom, chamar função pra por no banco de dados")
             #call database function
             name = self.report.lineEdit.text()
             surname = self.report.lineEdit_2.text()
@@ -91,14 +90,10 @@ class Validators:
 
             self.verification.close()
             self.window_swap(self.wopen, self.wclose) # troca de janela
-        else:
-            print("deu erro")
-            print("codigo que peguei ",self.verification.lineEdit.text(), "codigo gerado ", code)
 
 
     def birthValidation(self,date):
         month, day, year = date.split('/')
-        print(month, day, year)
         isValidDate = True
         try:
             d1 = datetime.datetime(int(year), int(month), int(day))
@@ -150,7 +145,6 @@ class Validators:
 
     # function to validate some fields
     def nameValidator(self,name, label):
-        print("validador2")
         if name.replace(" ", "").isalpha():
             label.setText("")
             return True
@@ -159,12 +153,21 @@ class Validators:
             return False
 
     def emailValidator(self,email,label):
-        pat = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
-        if re.match(pat, email):
-            label.setText("")
-            return True
-        label.setText("Email Invalido")
-        return False
+        email_control = 0
+        rows = self.user_connection.readfrom(self.connection)
+        for row in rows:
+            if row[11] == email:
+                email_control = 1
+        if email_control == 0:
+            pat = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
+            if re.match(pat, email):
+                label.setText("")
+                return True
+            label.setText("Invalid Email")
+            return False
+        else:
+            label.setText("Email already registered")
+            return False
 
 
     def cpf_validate(self,numbers):
@@ -194,7 +197,6 @@ class Validators:
         return True
 
     def Data_Validator(self):
-        print("validator1")
         name = self.report.lineEdit.text()
         surname = self.report.lineEdit_2.text()
         cpf = self.report.lineEdit_3.text()
@@ -213,9 +215,7 @@ class Validators:
         password_confirmation = self.report.lineEdit_10.text()
 
         # validators
-        print("validator11")
         name_validator = self.nameValidator(name, self.report.label_3)
-        print("validator12")
         surname_validator = self.nameValidator(surname, self.report.label_17)
         cpf_validator = self.cpf_validate(cpf)
         birth_date_validator = self.birthValidation(birth_date)
@@ -227,12 +227,11 @@ class Validators:
         password_confirmation_validator = self.passwordConfirmation(password, password_confirmation)
         # if it`s only edition there`s no need to check email again
         if self.comparative == 1:
-            print("entrou2")
             email_validator = self.emailValidator(email, self.report.label_24)
         else:
             email_validator = True
 
-        print("entrou3")
+
         validation = [name_validator, surname_validator, cpf_validator, birth_date_validator, city_validator,
                       profession_validator, team_validator, film_category_validator, email_validator,
                       password_validator,
@@ -240,9 +239,7 @@ class Validators:
 
         #in new sign up needs to check email
         if self.comparative == 1:
-            if False in validation:
-                print("nok")
-            else:
+            if not False in validation:
                 password_validator, code = self.emailConfirmation(name, email)
                 print(name, email)
                 print(code)
@@ -266,8 +263,6 @@ class Validators:
             to_do_list = self.report.textEdit.toPlainText()
             buy_list = self.report.textEdit_2.toPlainText()
             password = self.report.lineEdit_9.text()
-            #self.user_connection.writedown_edit(self.connection,name,surname,CPF,birth_date,city,uf,profession,soccer_team,film_category,to_do_list, buy_list,password)
-            #ATENTAR PARA O CAMPO DE EMAIL
             print("chegou aqui save")
             self.user_connection.updateinfo(self.connection,name,surname,CPF,birth_date,city,uf,profession,soccer_team,film_category,to_do_list, buy_list,'robertoduartejrr@gmail.com',password)
             print("chegou aqui save2")
