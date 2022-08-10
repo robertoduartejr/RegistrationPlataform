@@ -15,6 +15,28 @@ class Validators:
         self.connection = connection
 
 
+    def passwordValidator(self):
+        print("ok passwordval")
+        password = self.report.lineEdit_9.text()
+        email = self.report.lineEdit_8.text()
+        print("chegou aqui 2")
+        user_password = self.user_connection.getPassword(self.connection,email)
+        print("chegou aqui 3")
+        rows = self.user_connection.readfrom(self.connection)
+        print("chegou aqui?")
+        email_control = 0
+        for row in rows:
+            if row[11] == email:
+                email_control = 1
+        if email_control == 0:
+            print("email doesn't exist")
+        elif password != str(user_password[0]):
+            print(type(password),type(user_password[0]))
+            print("wrong password")
+        else:
+            print("igual")
+            self.window_swap(self.wopen,self.wclose)
+
 
     def window_swap(self,wopen, wclose):
         print("teste10")
@@ -244,6 +266,9 @@ class Validators:
             to_do_list = self.report.textEdit.toPlainText()
             buy_list = self.report.textEdit_2.toPlainText()
             password = self.report.lineEdit_9.text()
-            self.user_connection.writedown_edit(self.connection,name,surname,CPF,birth_date,city,uf,profession,soccer_team,film_category,to_do_list, buy_list,password)
-
+            #self.user_connection.writedown_edit(self.connection,name,surname,CPF,birth_date,city,uf,profession,soccer_team,film_category,to_do_list, buy_list,password)
+            #ATENTAR PARA O CAMPO DE EMAIL
+            print("chegou aqui save")
+            self.user_connection.updateinfo(self.connection,name,surname,CPF,birth_date,city,uf,profession,soccer_team,film_category,to_do_list, buy_list,'robertoduartejrr@gmail.com',password)
+            print("chegou aqui save2")
             self.window_swap(self.wopen,self.wclose)

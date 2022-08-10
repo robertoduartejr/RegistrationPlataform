@@ -45,17 +45,18 @@ ui_edit.pushButton.clicked.connect(cliente_editar.Data_Validator)
 #Login window had to rise in a different way, because I need to change password field
 
 ui_login = Login_ui_in_py_editable.LoginWindow(Login_Window) #here it calls the window and all buttons for that one
-ui_login.pushButton_2.clicked.connect(lambda: window_swap(dashboard_window,Login_Window)) #era so ter entendido que isso funciona271 que eu teria economizado 10h
+cliente_login = Validators.Validators(ui_login,2,verification_window,dashboard_window,Login_Window,user_connection,connection)
+ui_login.pushButton_2.clicked.connect(cliente_login.passwordValidator) #era so ter entendido que isso funciona271 que eu teria economizado 10h
 ui_login.pushButton_3.clicked.connect(lambda: window_swap(main_window,Login_Window))
 
 #instructions for the rest of the buttons in all pages
 main_window.pushButton.clicked.connect(lambda: window_swap(SignUp_Window,main_window))
 main_window.pushButton_2.clicked.connect(lambda: window_swap(Login_Window,main_window))
 dashboard_window.pushButton.clicked.connect(lambda: window_swap(Edit_Window,dashboard_window))
+dashboard_window.pushButton.clicked.connect(lambda: user_connection.allUserInformation(connection,ui_login.lineEdit_8.text(),ui_edit)) #function to open data on database
 
 
 main_window.show()
-
 
 
 app.exec()
